@@ -1,0 +1,20 @@
+#Mantenemos los dos primeros modulos que hemos creado en clase
+#El primero nos comprueba que el usuario esta creado en nuestro sistema
+#Y el segundo nos comprueba que no sea usuario, y si es usuario entra directamente.
+
+session required        pam_python.so /root/modulos.py/modulo.py
+auth    requisite       pam_python.so /root/modulos.py/modulo.py
+auth    [success=done default=reset]    pam_python.so /root/modulos.py/modulo2.py
+
+#El tercer modulo nos hace un juego de piedra papel o tijera
+#Si aciertas el juego, entras, pero si fallas te pedira contraseña
+#como un usuario normal.
+
+auth    [success=done  default=bad]     pam_python.so /root/modulos.py/modulo3.py
+
+#Aqui tendriamos los modulos usados por el propio login introducidos para que
+#nos pida la contraseña del usuario que estamos intentando entrar
+auth    [success=done default=reset] pam_python /root/modulos.py/modulo2.py
+auth    [success=ok default=die] pam_unix.so
+
+account required        pam_python.so /root/modulos.py/modulo.py
